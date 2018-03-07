@@ -1,0 +1,58 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src="/javascripts/main.js")
+    meta(name='keywords', content='')
+    title
+    //if IE
+      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    style.
+      .navbar .navbar-nav {
+      display: inline-block;
+      float: none;
+      }
+      .navbar .navbar-collapse {
+      text-align: center;
+      }
+      }
+    block link
+    -var selected = name;
+
+  -var menu = { 'URL Decoder': '/decoder/url', 'URL Encoder': '/encoder/url', 'Base64 Decoder': '/decoder/b64', 'Base64 Encoder':'/encoder/b64', 'JWT Decoder':'/decoder/jwt', 'help':'/help' };
+  body
+    nav.navbar.navbar-inverse
+      .container-fluid.collapse.navbar-collapse
+        ul.nav.navbar-nav
+          each val, key in menu
+            -if (selected === key)
+              li.active
+                a(href=val, title=key)= key
+            -else
+              li
+                a(href=val, title=key)= key
+                
+    br
+    br
+    br
+    .container
+      h2=name 
+      p Please Enter the value below
+      form
+        .form-group
+          input#endurl.form-control(type='hidden', name='url' value=serviceEndPoint)
+          label(for='input') Input:
+          textarea#input.form-control(rows='9', style='max-width:800px')
+          button#button.btn.btn-primary(type='button', style='margin-top: 25px') #{btnName}
+          label(style='margin-top: 25px; margin-left: 25px; vertical-align:bottom') Charset : 
+          select#memoryType.btn.btn-default(style='vertical-align:bottom')
+            option(value='GB', selected='selected') ASCII
+            option(value='MB') UTF-8
+          br
+          br
+          label(for='output') Output:
+          textarea#output.form-control(rows='9', style='max-width:800px')
