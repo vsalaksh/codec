@@ -25,7 +25,7 @@ public class Base64Decoder {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response decode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
+    public CodecResponse decode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
 	{
 		String decodedValue = "";
 		System.out.println("Param String Value: " + str);
@@ -43,11 +43,8 @@ public class Base64Decoder {
 		}
 		CodecResponse codecRes = new CodecResponse();
 		codecRes.setOutput(decodedValue);
-		
-		
-		ResponseBuilder resp = Response.ok("{\"output\":"+ "\""+decodedValue + "\"}");
-		System.out.println(resp.build());
-		return resp.build();
+				
+		return codecRes;
 	}
 
 }

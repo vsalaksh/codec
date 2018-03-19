@@ -26,7 +26,7 @@ public class Base64Encoder {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response encode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
+    public CodecResponse encode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
 	{
 		String encodedValue = "";
 		System.out.println("Param String Value: " + str);
@@ -45,9 +45,6 @@ public class Base64Encoder {
 		CodecResponse codecRes = new CodecResponse();
 		codecRes.setOutput(encodedValue);
 		
-		
-		ResponseBuilder resp = Response.ok("{\"output\":"+ "\""+encodedValue + "\"}");
-		System.out.println(resp.build());
-		return resp.build();
+		return codecRes;
 	}
 }

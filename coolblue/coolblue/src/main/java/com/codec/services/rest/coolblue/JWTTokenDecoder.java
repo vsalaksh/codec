@@ -1,6 +1,5 @@
 package com.codec.services.rest.coolblue;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,20 +10,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
+import com.codec.services.exception.InvalidInputException;
 import com.codec.services.model.CodecRequest;
 import com.codec.services.model.CodecResponse;
+import com.codec.services.model.RawJWTToken;
+import com.codec.services.util.JSONStringFormatter;
+import com.codec.services.util.JWTParser;
 
 @Path("/decoder/jwt")
 public class JWTTokenDecoder {
-	
+
 	private Base64.Decoder decoder = Base64.getDecoder();
-	
+	private JWTParser parser = new JWTParser();
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response decode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req) {
+	public CodecResponse decode(@Context HttpServletResponse response, @QueryParam("input") String str,
+			CodecRequest req) {
 		CodecResponse resp = new CodecResponse();
 		String decodedValue = "";
 		System.out.println("Param String Value: " + str);
@@ -32,16 +36,17 @@ public class JWTTokenDecoder {
 
 		if (str == null)
 			str = req.getInput();
+		RawJWTToken jwtToken;
+		try {
+			jwtToken = parser.parse(str);
+			resp.setOutput(jwtToken.toString());
+		} catch (InvalidInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			resp.setErrorMessage(e.getMessage());
+		}
 
-		String[] split_string = str.split("\\.");
-		String base64EncodedHeader = split_string[0];
-		String base64EncodedBody = split_string[1];
-		String base64EncodedSignature = split_string[2];
-		String jwtHeader = decoder.decode(base64EncodedHeader);
-		String jwtBody = decoder.decode(base64EncodedBody);
-		
-		
-		return null;
+		return resp;
 
 	}
 

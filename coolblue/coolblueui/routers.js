@@ -35,7 +35,7 @@ router.get('/decoder/jwt', function(req, res){
    res.render('codec', {
       name: "JWT Decoder", 
       btnName:"Decode",
-	  serviceEndPoint:"http://localhost:8080/coolblue/webapi/decoder/url"
+	  serviceEndPoint:"http://localhost:8080/coolblue/webapi/decoder/jwt"
    });
 });
 
