@@ -27,29 +27,29 @@ public class CoolURLDecoder {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response decode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
+    public CodecResponse decode(@Context HttpServletResponse response, @QueryParam("input") String str, CodecRequest req)
 	{
 		String decodedValue = "";
 		System.out.println("Param String Value: " + str);
 		System.out.println("Parsed From Codec Request " + (req!=null? req.getInput() : "NULL"));
+		CodecResponse codecRes = new CodecResponse();
 		try 
 		{
 			if (str == null)
 				str = req.getInput();
 			decodedValue = decoder.decode(str, "UTF-8");
+			codecRes.setOutput(decodedValue);
+			
 		} 
 		catch (UnsupportedEncodingException e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			codecRes.setErrorMessage("Input is not valid");
 		}
-		CodecResponse codecRes = new CodecResponse();
-		codecRes.setOutput(decodedValue);
 		
 		
-		ResponseBuilder resp = Response.ok("{\"output\":"+ "\""+decodedValue + "\"}");
-		System.out.println(resp.build());
-		return resp.build();
+		return codecRes;
 	}
 
 }

@@ -1,9 +1,10 @@
 $(function(){
+$('#hideBtn').click(function(){
+alert('Clicked');
+$('#passwordsNoMatchRegister').hide();
+});
  $('#button').click(function(){
-      //alert($('#input').val());
-	  //alert($('#input').val());
-	  //alert($('#endurl').val());
-	  var response = '';
+      var response = '';
 	  var input = $('#input').val();
 	  $.ajax({ type: "POST",   
 	  url: $('#endurl').val(),
@@ -27,6 +28,8 @@ $(function(){
 		 }
 });
 //alert(response);
-				
+$('#passwordsNoMatchRegister').show();
+$('#passwordsNoMatchRegister').css('z-index: 1');
+			
 });
 });

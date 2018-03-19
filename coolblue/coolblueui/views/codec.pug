@@ -16,6 +16,9 @@ html(lang='en')
       display: inline-block;
       float: none;
       }
+      .alert {
+      width:40%; 
+      }
       .navbar .navbar-collapse {
       text-align: center;
       }
@@ -36,10 +39,13 @@ html(lang='en')
               li
                 a(href=val, title=key)= key
                 
-    br
-    br
-    br
     .container
+      #passwordsNoMatchRegister.alert.alert-danger
+        span
+          p Looks like the passwords you entered don't match!
+          button.close(id='hide' type='button', data-dismiss='alert', aria-label='Close')
+            span(aria-hidden='true') ×
+      button#hideBtn.btn.btn-primary Click here to hide Alert
       h2=name 
       p Please Enter the value below
       form
