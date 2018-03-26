@@ -1,0 +1,194 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
+    script(src='/javascripts/main.js')
+    script(src='/javascripts/prettify.js')
+    link(href='/css/prettify.css', type='text/css', rel='stylesheet')
+    meta(name='keywords', content='Decoder, Encoder, Code Formatters, PDF Splits')
+    title Developer Tools, JSON Formattters, XML Formatters and HTML Formatters
+    //
+      if IEscript(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    style.
+      .navbar .navbar-nav {
+      display: inline-block;
+      float: none;
+      }
+      .alert {
+      width:40%;
+      }
+      .navbar .navbar-collapse {
+      text-align: center;
+      }
+      }
+      .social {
+      margin: 0;
+      padding: 0;
+      }
+      .social ul {
+      margin: 0;
+      padding: 5px;
+      }
+      .social ul li {
+      margin: 5px;
+      list-style: none outside none;
+      display: inline-block;
+      }
+      .social i {
+      width: 40px;
+      height: 40px;
+      color: #FFF;
+      background-color: #909AA0;
+      font-size: 22px;
+      text-align:center;
+      padding-top: 12px;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -o-border-radius: 50%;
+      transition: all ease 0.3s;
+      -moz-transition: all ease 0.3s;
+      -webkit-transition: all ease 0.3s;
+      -o-transition: all ease 0.3s;
+      -ms-transition: all ease 0.3s;
+      }
+      .social i:hover {
+      color: #FFF;
+      text-decoration: none;
+      transition: all ease 0.3s;
+      -moz-transition: all ease 0.3s;
+      -webkit-transition: all ease 0.3s;
+      -o-transition: all ease 0.3s;
+      -ms-transition: all ease 0.3s;
+      }
+      .social .fa-facebook:hover {
+      background: #4060A5;
+      }
+      .social .fa-twitter:hover {
+      background: #00ABE3;
+      }
+      .social .fa-google-plus:hover {
+      background: #e64522;
+      }
+      .social .fa-github:hover {
+      background: #343434;
+      }
+      .social .fa-pinterest:hover {
+      background: #cb2027;
+      }
+      .social .fa-linkedin:hover {
+      background: #0094BC;
+      }
+      .social .fa-flickr:hover {
+      background: #FF57AE;
+      }
+      .social .fa-instagram:hover {
+      background: #375989;
+      }
+      .social .fa-vimeo-square:hover {
+      background: #83DAEB;
+      }
+      .social .fa-stack-overflow:hover {
+      background: #FEA501;
+      }
+      .social .fa-dropbox:hover {
+      background: #017FE5;
+      }
+      .social .fa-tumblr:hover {
+      background: #3a5876;
+      }
+      .social .fa-dribbble:hover {
+      background: #F46899;
+      }
+      .social .fa-skype:hover {
+      background: #00C6FF;
+      }
+      .social .fa-stack-exchange:hover {
+      background: #4D86C9;
+      }
+      .social .fa-youtube:hover {
+      background: #FF1F25;
+      }
+      .social .fa-xing:hover {
+      background: #005C5E;
+      }
+      .social .fa-rss:hover {
+      background: #e88845;
+      }
+      .social .fa-foursquare:hover {
+      background: #09B9E0;
+      }
+      .social .fa-youtube-play:hover {
+      background: #DF192A;
+      }      
+    block link
+    -var selected = name;
+
+  -var menu = { 'JSON Formatter': '/formatter/json', 'XML Formatter': '/formatter/xml', 'HTML Formatter': '/formatter/html', 'CSS Formatter':'/formatter/css', 'JavaScript Formatter':'/formatter/javascript', 'help':'/help' };
+  body(onload='prettyPrint()')
+    
+    nav.navbar.navbar-inverse
+      .container-fluid.collapse.navbar-collapse
+        ul.nav.navbar-nav
+          each val, key in menu
+            -if (selected === key)
+              li.active
+                a(href=val, title=key)= key
+            -else
+              li
+                a(href=val, title=key)= key		
+    .container
+      .row
+        .col-md-9
+          div
+            div
+              .social(style='float: right;padding-right:80px')
+                ul
+                  li
+                    a(href='#')
+                      i.fa.fa-lg.fa-facebook
+                  li
+                    a(href='#')
+                      i.fa.fa-lg.fa-twitter
+                  li
+                    a(href='#')
+                      i.fa.fa-lg.fa-linkedin
+                  li
+                    a(href='#')
+                      i.fa.fa-lg.fa-google-plus
+              div
+                br
+                h2=name
+                p Please Enter the value below
+            form
+              .form-group
+                input#endurl.form-control(type='hidden', name='url' value=serviceEndPoint)
+                label(for='input') Input:
+                textarea#input.form-control(rows='9', style='max-width:800px')
+                button#button.btn.btn-primary(type='button', style='margin-top: 25px') Format
+                label(style='margin-top: 25px; margin-left: 25px; vertical-align:bottom') Charset : 
+                select#memoryType.btn.btn-default(style='vertical-align:bottom')
+                  option(value='GB', selected='selected') ASCII
+                  option(value='MB') UTF-8
+                br
+                br
+                label(for='output') Output:
+                pre#formatted.prettyprint(style='max-width:800px;max-height:200x')
+                textarea#output.form-control(rows='25', style='max-width:800px')
+        .col-md-2.hidden-xs(style='width:220px; float: left; padding:0,20,0,0')
+          br
+          br
+          .panel.panel-default
+            .list-group
+              a.list-group-item.active(href='/formatter/json') Code Formatter
+              a.list-group-item(href='#') Java Tools
+              a.list-group-item(href='#') PDF Tools
+              a.list-group-item(href='/decoder/url') Encoder/Decoder
+              a.list-group-item(href='#') Encrypter/Decrypter
+              a.list-group-item(href='#') SAML Tools
+              a.list-group-item(href='#') OAuth Tools
