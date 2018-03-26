@@ -14,7 +14,7 @@ public class JavaDecompiler {
 	public static String decompile() throws ClassNotFoundException, IOException {
 		PlainTextOutput output = new PlainTextOutput();
 		File file = new File("d:\\");
-		File aFile = new File("AbstractSessionManager.class");
+		File aFile = new File("OAuthTokenizer.class");
 		// convert the file to URL format
 		URL url = file.toURI().toURL();
 		URL[] urls = new URL[] { url };
@@ -23,7 +23,7 @@ public class JavaDecompiler {
 		CustomURLClassLoader cl = new CustomURLClassLoader(urls);
 		String directoryPath = "";
 		try {
-			Class cls = cl.loadClass("AbstractSessionManager", false);
+			Class cls = cl.loadClass("OAuthTokenizer", false);
 		} catch (Error exc) {
 			String msg = exc.getMessage();
 			System.out.println(msg);
@@ -34,8 +34,8 @@ public class JavaDecompiler {
 		String copyTo = directory.getAbsolutePath() + File.separatorChar + aFile.getName();
 		System.out.println(copyTo);
 		aFile.renameTo(new File(copyTo));
-		Decompiler.decompile("oracle.security.am.engines.sme.mgr.AbstractSessionManager", output);
-		File decompiled = new File("AbstractSessionManager.java");
+		Decompiler.decompile("OAuthTokenizer", output);
+		File decompiled = new File("OAuthTokenizer.java");
 		FileWriter fileWriter = new FileWriter(decompiled);
 		String toPrint = output.toString();
 		BufferedWriter bufWriter = new BufferedWriter(fileWriter);
