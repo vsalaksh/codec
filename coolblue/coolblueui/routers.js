@@ -39,5 +39,48 @@ router.get('/decoder/jwt', function(req, res){
    });
 });
 
+//Formatter Module Configuration
+
+router.get('/formatter/json', function(req, res){
+   res.render('formatter', {
+      name: "JSON Formatter", 
+      btnName:"Format",
+	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/json"
+	  
+   });
+});
+router.get('/formatter/xml', function(req, res){
+   res.render('formatter', {
+      name: "XML Formatter", 
+      btnName:"Format",
+	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/xml"
+	  
+   });
+});
+router.get('/formatter/html', function(req, res){
+   res.render('formatter', {
+      name: "HTML Formatter", 
+      btnName:"Format",
+	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/html"
+	  
+   });
+});
+router.get('/formatter/css', function(req, res){
+   res.render('formatter', {
+      name: "CSS Formatter", 
+      btnName:"Format",
+	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/css"
+	  
+   });
+});
+router.get('/formatter/javascript', function(req, res){
+   res.render('formatter', {
+      name: "JavaScript Formatter", 
+      btnName:"Format",
+	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/javascript"
+	  
+   });
+});
+
 //export this router to use in our index.js
 module.exports = router;
