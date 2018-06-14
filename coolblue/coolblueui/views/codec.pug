@@ -8,8 +8,19 @@ html(lang='en')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
     script(src="/javascripts/main.js")
+    // Google Analytics
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-116074102-1', 'auto');
+      ga('send', 'pageview');
+    // End Google Analytics
+    meta(name='description', content='Online decoder and encoder. This tool can be used to decode/encode URL/Base64 content as well as JWT Token') 
+    meta(name='google-site-verification', content='fSZDZoueRvEWkwHzBEB2N7AWIr-3aSTr-Muxn5wDgwU') 
     meta(name='keywords', content='Decoder, Encoder, Code Formatters, PDF Splits')
-    title Developer Tools, Encoder, Decoder and Formattters
+    title=title
     //if IE
       script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
     style.
@@ -127,19 +138,28 @@ html(lang='en')
     block link
     -var selected = name;
 
-  -var menu = { 'URL Decoder': '/decoder/url', 'URL Encoder': '/encoder/url', 'Base64 Decoder': '/decoder/b64', 'Base64 Encoder':'/encoder/b64', 'JWT Decoder':'/decoder/jwt', 'help':'/help' };
+  -var menu = { 'URL Decoder': '/decoder/url', 'URL Encoder': '/encoder/url', 'Base64 Decoder': '/decoder/b64', 'Base64 Encoder':'/encoder/b64', 'JWT Decoder':'/decoder/jwt'};
   body
-    nav.navbar.navbar-inverse
-      .container-fluid.collapse.navbar-collapse
-        ul.nav.navbar-nav
-          each val, key in menu
-            -if (selected === key)
-              li.active
-                a(href=val, title=key)= key
-            -else
-              li
-                a(href=val, title=key)= key
-                
+    nav.navbar.navbar-inverse.pull-center
+      .container-fluid
+        .navbar-header(style='max-width:1000px')
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#myNavbar')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(style='padding-left:200px', href='#') DevToolZone
+        #myNavbar.collapse.navbar-collapse(style='max-width:1000px')
+          ul.nav.navbar-nav.pull-right(style='text-align:right')
+            li
+              a(href='/decoder/url', title='URL Decoder') URL Decoder
+            li
+              a(href='/encoder/url', title='URL Encoder') URL Encoder
+            li
+              a(href='/decoder/b64', title='Base64 Decoder') Base64 Decoder
+            li
+              a(href='/encoder/b64', title='Base64 Encoder') Base64 Encoder
+            li
+              a(href='/decoder/jwt', title='JWT Decoder') JWT Decoder
     .container
       .row
         .col-md-9
@@ -148,27 +168,28 @@ html(lang='en')
               .social(style='float: right;padding-right:80px')
                 ul
                   li
-                    a(href='#')
+                    a(href='https://www.facebook.com/sharer/sharer.php?u=http://devtoolzone.com',onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;", target='_blank', title='Share on Facebook')
                       i.fa.fa-lg.fa-facebook
                   li
-                    a(href='#')
+                    a(href='https://twitter.com/share?url=http://devtoolzone.com&via=TWITTER_HANDLE&text=Devloper%20tools%20you%20may%20find%20useful', onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;", target='_blank', title='Share on Twitter')
                       i.fa.fa-lg.fa-twitter
                   li
-                    a(href='#')
+                    a(href='https://www.linkedin.com/shareArticle?mini=true&url=http://devtoolzone.com&title=Share%20on%20LinkedIn', onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;", target='_blank', title='Share on LinkedIn')
                       i.fa.fa-lg.fa-linkedin
                   li
-                    a(href='#')
+                    a(href='https://plus.google.com/share?url=http://devtoolzone.com', onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=480');return false;", target='_blank', title='Share on Google+')
                       i.fa.fa-lg.fa-google-plus
               div
                 br
                 h2=name
-                p Please Enter the value below
+                .panel.panel-default(style='max-width:800px; border:0px')
+                  value=content
             form
               .form-group
                 input#endurl.form-control(type='hidden', name='url' value=serviceEndPoint)
-                label(for='input') Input:
+                label(for='input') Input:				 
                 textarea#input.form-control(rows='9', style='max-width:800px')
-                button#button.btn.btn-primary(type='button', style='margin-top: 25px') Decode
+                button#button.btn.btn-primary(type='button', style='margin-top: 25px') #{btnName}
                 label(style='margin-top: 25px; margin-left: 25px; vertical-align:bottom') Charset : 
                 select#memoryType.btn.btn-default(style='vertical-align:bottom')
                   option(value='GB', selected='selected') ASCII
@@ -182,11 +203,6 @@ html(lang='en')
           br
           .panel.panel-default
             .list-group
-              a.list-group-item(href='/formatter/json') Code Formatter
-              a.list-group-item(href='#') Java Tools
-              a.list-group-item(href='#') PDF Tools
               a.list-group-item.active(href='/decoder/url') Encoder/Decoder
-              a.list-group-item(href='#') Encrypter/Decrypter
-              a.list-group-item(href='#') SAML Tools
-              a.list-group-item(href='#') OAuth Tools
-
+              a.list-group-item(href='/formatter/json') Code Formatter
+              a.list-group-item(href='/decompiler/java') Java Tools        

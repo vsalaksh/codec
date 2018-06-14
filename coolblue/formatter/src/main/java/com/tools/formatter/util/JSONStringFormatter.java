@@ -15,7 +15,7 @@ public class JSONStringFormatter {
 		}
 		catch (Exception exc)
 		{
-			formattedString = "Error while formatting JSON String";
+			formattedString = "Error while formatting JSON String " + exc.getMessage();
 			exc.printStackTrace();
 		}
 		

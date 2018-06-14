@@ -32,7 +32,7 @@ public class CustomURLClassLoader extends URLClassLoader{
 	      InputStream in = null;
 	      try {
 	        // get the input stream, throwing ClassNotFound if there is no resource.
-	        in = new FileInputStream("d:/" + name.replaceAll("\\.", "/") +".class");
+	        in = new FileInputStream("/home/ec2-user/temp/" + name.replaceAll("\\.", "/") +".class");
 	        if( in == null ) throw new ClassNotFoundException("Could not find "+name);
 	        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 

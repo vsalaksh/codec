@@ -32,7 +32,7 @@ public class XMLStringFormatter {
 			return xmlOutput.getWriter().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
+			return "Error in Formatting XML String: " + e.getMessage();
 		}
 
 	}

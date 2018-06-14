@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -142,27 +142,39 @@
     background: #09B9E0;
 }
 
-.social .fa-youtube-play:hover {
+.social .fa-youtube-play:hover { 
     background: #DF192A;
 }
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li><a href="/decoder/url" title="URL Decoder">URL Decoder</a></li>
-          <li><a href="/encoder/url" title="URL Encoder">URL Encoder</a></li>
-          <li><a href="/decoder/b64" title="Base64 Decoder">Base64 Decoder</a></li>
-          <li><a href="/encoder/b64" title="Base64 Encoder">Base64 Encoder</a></li>
-          <li><a href="/decoder/jwt" title="JWT Decoder">JWT Decoder</a></li>
-          <li><a href="/help" title="help">help</a></li>
-        </ul>
+  
+    <nav class="navbar navbar-inverse pull-center">
+      <div class="container-fluid">
+	  <div class="navbar-header" style="max-width:1000px">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" style="padding-left:200px" href="#">DevToolZone</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar" style="max-width:1000px">
+	
+      <ul class="nav navbar-nav pull-right" style="text-align:right">
+        <li><a href="/decoder/url" title="URL Decoder">URL Decoder</a></li>
+              <li><a href="/encoder/url" title="URL Encoder">URL Encoder</a></li>
+              <li><a href="/decoder/b64" title="Base64 Decoder">Base64 Decoder</a></li>
+              <li><a href="/encoder/b64" title="Base64 Encoder">Base64 Encoder</a></li>
+              <li><a href="/decoder/jwt" title="JWT Decoder">JWT Decoder</a></li>
+      </ul>
+      
+    </div>
+        
       </div>
     </nav><br>
     <div class="container">
-	
-    <div class="row">
+	<div class="row">
       <div class="col-md-9">
 	  <div>
 	  <div>
@@ -177,7 +189,13 @@
 	  <div>
 	  <br>
       <h2>URL Encoder</h2>
-      <p>Please Enter the value below</p>
+	  
+	  <div class="panel panel-default" style="max-width:800px; border:0px">
+	  Only ASCII character-set are allowed in the URL. For any other characters to be part of the url, first it should be encoded such that any unsafe ASCII characters are replaced with a "%" followed by two hexadecimal digits.
+Also URLs cannot contain spaces. URL encoding normally replaces a space with a plus (+) sign or with %20. The process of converting a string in to valid url format is called URL Encoding or Percentage Encoding
+	  </div>
+	  
+      
 	  </div>
 	  
 		</div>
@@ -198,8 +216,8 @@
       </form>
 	  
 	  </div>
-      </div>
-   
+      
+   </div>
       <div class="col-md-2 hidden-xs" style="width:220px; float: left;">
                 <div class="panel panel-default">
                     <div class="list-group">
@@ -241,5 +259,6 @@
             </div>
 			</div>
     </div>
+	
   </body>
 </html>

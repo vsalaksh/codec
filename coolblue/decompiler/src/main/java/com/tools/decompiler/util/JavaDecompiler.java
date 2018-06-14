@@ -4,38 +4,36 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 
 import com.strobel.decompiler.Decompiler;
 import com.strobel.decompiler.PlainTextOutput;
 
 public class JavaDecompiler {
 
-	public static String decompile() throws ClassNotFoundException, IOException {
+	public static String decompile(String compiledClass) throws ClassNotFoundException, IOException {
 		PlainTextOutput output = new PlainTextOutput();
-		File file = new File("d:\\");
-		File aFile = new File("OAuthTokenizer.class");
-		// convert the file to URL format
-		URL url = file.toURI().toURL();
-		URL[] urls = new URL[] { url };
-
-		// load this folder into Class loader
-		CustomURLClassLoader cl = new CustomURLClassLoader(urls);
-		String directoryPath = "";
-		try {
-			Class cls = cl.loadClass("OAuthTokenizer", false);
-		} catch (Error exc) {
-			String msg = exc.getMessage();
-			System.out.println(msg);
-			directoryPath = msg.substring(msg.indexOf(':')+2, msg.lastIndexOf('/'));
-		}
-		System.out.println(directoryPath);
+		String directoryPath = getPackageName(compiledClass);
 		File directory = createDirectory(directoryPath);
-		String copyTo = directory.getAbsolutePath() + File.separatorChar + aFile.getName();
+		//File aFile = new File("d:\\" + compiledClass + ".class");
+		//String targetDirectory = "d:\\customclasspath\\" + directoryPath.replace('/','\\');
+		//File directory = createDirectory(directoryPath);
+		File aFile = new File("/home/ec2-user/temp/" + compiledClass + ".class");
+		String targetDirectory = "/home/ec2-user/customclasspath/" + directoryPath;
+		String copyTo = targetDirectory + File.separatorChar + aFile.getName();
+		
+		createDirectory(targetDirectory);
 		System.out.println(copyTo);
-		aFile.renameTo(new File(copyTo));
-		Decompiler.decompile("OAuthTokenizer", output);
-		File decompiled = new File("OAuthTokenizer.java");
+		//moveTo(aFile, targetDirectory + "\\" + compiledClass + ".class");
+		moveTo(aFile, targetDirectory + "/" + compiledClass + ".class");
+		
+		Decompiler.decompile(directoryPath.replace('/', '.') + "." + compiledClass, output);
+		
+		File decompiled = new File(compiledClass + ".java");
 		FileWriter fileWriter = new FileWriter(decompiled);
 		String toPrint = output.toString();
 		BufferedWriter bufWriter = new BufferedWriter(fileWriter);
@@ -59,18 +57,54 @@ public class JavaDecompiler {
 			System.out.println(exc.getMessage());
 			exc.printStackTrace();
 		}
-		return "Good";
+		return toPrint;
 	}
 
+	private static String getPackageName(String className) throws MalformedURLException 
+	{
+		File file = new File("d:\\");
+		File aFile = new File("d:\\" + className);
+		// convert the file to URL format
+		URL url = file.toURI().toURL();
+		URL[] urls = new URL[] { url };
+
+		// load this folder into Class loader
+		CustomURLClassLoader cl = new CustomURLClassLoader(urls);
+		String packageName = "";
+		try {
+			Class cls = cl.loadClass(className, false);
+		} catch (Error exc) {
+			String msg = exc.getMessage();
+			System.out.println(msg);
+			packageName = msg.substring(msg.indexOf(':')+2, msg.lastIndexOf('/'));
+			//packageName = msg.substring(0, msg.lastIndexOf('/'));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(packageName);
+		
+		
+		return packageName;
+		
+	}
 	private static File createDirectory(String path) {
 		File directoryPath = new File(path);
 		directoryPath.mkdirs();
 		return directoryPath;
 	}
+	
+	private static File moveTo(File aFile, String copyTo)
+	{
+		System.out.println(copyTo);
+		aFile.renameTo(new File(copyTo));
+		return aFile;
+		
+	}
 
 	public static void main(String[] args) throws Exception {
 		try {
-			System.out.println(decompile());
+			System.out.println(decompile("CodecRequest"));
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
