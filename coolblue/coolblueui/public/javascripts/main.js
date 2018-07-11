@@ -42,12 +42,14 @@ $(function(){
          {
              $("pre").removeClass("prettyprinted");
 			 response = text.output;
+			 $('#textoutput').val(response);
 			 //$('#output').val(response);
 			 response = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 			 //response = response.replace(/&lt;script src[\\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g, '<span class=operative>$&</span>');
 			 
 			 //document.getElementById("formatted").innerHTML = response;
-			 $('#formatted').html(response);
+			 $('#output').html(response);
+			 $('#textoutput').html(response);
 			 PR.prettyPrint();
 			 
          },
@@ -61,11 +63,14 @@ $(function(){
  });
  
  $('#decompile').click(function(){
+ $('#formatted').html('<div class="container"><div class="row"><div class="col-md-3 bg"> Decompiling in progresss<div class="loader" id="loader-6"><span></span><span></span><span></span></div></div></div>');
  var response = '';
 	  //alert('Clicked Decompile');
 	  var formval = new FormData();
 jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
     formval.append('file', file);
+	$('#filename').val(file.name.split('.')[0] + '.java');
+	//alert(file.name.split('.')[0]);
 });
 	  $.ajax({ type: "POST", url: $('#endurl').val(), crossDomain: true, contentType: false, processData: false, 
 	    data: formval,
@@ -74,6 +79,7 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
              $("pre").removeClass("prettyprinted");
 			 response = text.decompiledCode;
 			 $('#output').val(response);
+			 $('#textoutput').val(response);
 			 response = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 			 //response = response.replace(/&lt;script src[\\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g, '<span class=operative>$&</span>');
 			 
@@ -84,7 +90,7 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
          },
 		 error : function(text, status, error)
 		 {
-		 alert(error);
+		 alert(error + text.text);
 		 }
  
  });
@@ -101,6 +107,63 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
 
 });
  $('#copyBtn').click(function(){
+  var copyText = document.getElementById("output");
+ alert($('#textoutput').val());
+copyText.select();
+
+ document.execCommand("copy");
+
+ });
+ $('#copyFormattedBtn').click(function(){
+  var copyText = document.getElementById("textoutput").value;
+ var tempInput = document.createElement("textarea");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = copyText;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    
+    
+ alert(copyText);
+ document.execCommand("copy");
+ document.body.removeChild(tempInput);
+
+ });
+ $('#downloadBtn').click(function(){
+ var textToWrite = document.getElementById("textoutput").value;
  
- });		
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+	var fileType = '';
+    var fileNameToSaveAs = $('#filename').val();;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+        // Chrome allows the link to be clicked
+        // without actually adding it to the DOM.
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+        // Firefox requires the link to be added to the DOM
+        // before it can be clicked.
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+ });
+ $('#input').on('paste', function(e) {
+setTimeout(function(){ //break the callstack to let the event finish
+
+    //alert($('#input').val()); //read the value of the input field   
+$("#button").click();
+$("#format").click();
+  },0); 
+ 
+   
+});	
 });

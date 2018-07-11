@@ -7,7 +7,7 @@ html(lang='en')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
-    script(src='/javascripts/main.js')
+    script(src="/javascripts/main.js")
     // Google Analytics
     script.
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -19,19 +19,17 @@ html(lang='en')
     // End Google Analytics
     meta(name='description', content=metaContent) 
     meta(name='google-site-verification', content='fSZDZoueRvEWkwHzBEB2N7AWIr-3aSTr-Muxn5wDgwU') 
-    script(src='/javascripts/prettify.js')
-    link(href='/css/prettify.css', type='text/css', rel='stylesheet')
-    meta(name='keywords', content='Decoder, Encoder, Code Formatters, PDF Splits')
+    meta(name='keywords', content='Java Decompiler, Decoder, Encoder, Code Formatters, PDF Splits')
     title=title
-    //
-      if IEscript(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    //if IE
+      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
     style.
       .navbar .navbar-nav {
       display: inline-block;
       float: none;
       }
       .alert {
-      width:40%;
+      width:40%; 
       }
       .navbar .navbar-collapse {
       text-align: center;
@@ -137,15 +135,85 @@ html(lang='en')
       .social .fa-youtube-play:hover {
       background: #DF192A;
       }
+      .input-append input + .btn {margin-left: -5px;}
       .glyphicon {
       font-size: 30px;
-      }      
+      }
+      .col-md-3 {
+      display: block;
+      float:left;
+      margin: 1% 0 1% 1.6%;
+      background-color: #f5f5f5;
+      padding: 50px 0;
+      }
+
+      .col:first-of-type {
+      margin-left: 0;
+      }
+
+
+      /* ALL LOADERS */
+
+      .loader{
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      position: relative;
+      margin: 0 auto;
+      }
+
+
+      /* LOADER 6 */
+
+      #loader-6{
+      top: 40px;
+      left: -2.5px;
+      }
+
+      #loader-6 span{
+      display: inline-block;
+      width: 5px;
+      height: 20px;
+      background-color: #3498db;
+      }
+
+      #loader-6 span:nth-child(1){
+      animation: grow 1s ease-in-out infinite;
+      }
+
+      #loader-6 span:nth-child(2){
+      animation: grow 1s ease-in-out 0.15s infinite;
+      } 
+
+      #loader-6 span:nth-child(3){
+      animation: grow 1s ease-in-out 0.30s infinite;
+      }
+
+      #loader-6 span:nth-child(4){
+      animation: grow 1s ease-in-out 0.45s infinite;
+      }
+
+      @keyframes grow{
+      0%, 100%{
+      -webkit-transform: scaleY(1);
+      -ms-transform: scaleY(1);
+      -o-transform: scaleY(1);
+      transform: scaleY(1);
+      }
+
+      50%{
+      -webkit-transform: scaleY(1.8);
+      -ms-transform: scaleY(1.8);
+      -o-transform: scaleY(1.8);
+      transform: scaleY(1.8);
+      }
+      }
+
     block link
     -var selected = name;
 
-  -var menu = { 'JSON Formatter': '/formatter/json', 'XML Formatter': '/formatter/xml', 'HTML Formatter': '/formatter/html'};
-  body(onload='prettyPrint()')
-    
+  -var menu = { 'URL Decoder': '/decoder/url', 'URL Encoder': '/encoder/url', 'Base64 Decoder': '/decoder/b64', 'Base64 Encoder':'/encoder/b64', 'JWT Decoder':'/decoder/jwt'};
+  body
     nav.navbar.navbar-inverse.pull-center
       .container-fluid
         .navbar-header(style='max-width:1000px')
@@ -155,14 +223,17 @@ html(lang='en')
             span.icon-bar
           a.navbar-brand(style='padding-left:200px', href='#') DevToolZone
         #myNavbar.collapse.navbar-collapse(style='max-width:1000px')
-          ul.nav.navbar-nav
-            each val, key in menu
-              -if (selected === key)
-                li.active
-                  a(href=val, title=key)= key
-              -else
-                li
-                  a(href=val, title=key)= key		
+          ul.nav.navbar-nav.pull-right(style='text-align:right')
+            li
+              a(href='/decoder/url', title='URL Decoder') URL Decoder
+            li
+              a(href='/encoder/url', title='URL Encoder') URL Encoder
+            li
+              a(href='/decoder/b64', title='Base64 Decoder') Base64 Decoder
+            li
+              a(href='/encoder/b64', title='Base64 Encoder') Base64 Encoder
+            li
+              a(href='/decoder/jwt', title='JWT Decoder') JWT Decoder
     .container
       .row
         .col-md-9
@@ -184,38 +255,40 @@ html(lang='en')
                       i.fa.fa-lg.fa-google-plus
               div
                 br
-                h2=name
+                h2=name 
                 .panel.panel-default(style='max-width:800px; border:0px')
                   value=content
-            form
+                br               
+            form#decompilerForm(action='http://localhost:8080/decompiler/webapi/decompiler/java', method='post', enctype='multipart/form-data')
               .form-group
-                input#endurl.form-control(type='hidden', name='url' value=serviceEndPoint)
-                label(for='input') Input:
-                textarea#input.form-control(rows='9', style='max-width:800px')
-                button#format.btn.btn-primary(type='button', style='margin-top: 25px') #{btnName}
-                label(style='margin-top: 25px; margin-left: 25px; vertical-align:bottom') Charset : 
-                select#memoryType.btn.btn-default(style='vertical-align:bottom')
-                  option(value='GB', selected='selected') ASCII
-                  option(value='MB') UTF-8
-                br
-                br
-                label(for='output') Output:
-                button#copyFormattedBtn.btn.btn-link.pull-right(type='button', style='padding-right:60px', onclick='copyToClibboard()')
-                  a(href='#', data-toggle='tooltip', data-placement='bottom', title='Copy')
-                    span.glyphicon.glyphicon-copy
-                button#downloadBtn.btn.btn-link.pull-right(type='button', style='padding-right:30px', onclick='saveTextAsFile()')
-                  a(href='#', data-toggle='tooltip', data-placement='bottom', title='Download')
-                    span.glyphicon.glyphicon-download-alt
-                br
-                br
-                br
-                pre#output.prettyprint(style='max-width:800px;max-height:600px')
-                input#textoutput.form-control(type='hidden', style='display:none;')
+                input#endurl.form-control(type='hidden', name='url', value=serviceEndPoint)
+                .row
+                  .col-sm-12(style='margin-bottom:20px;')
+                    input#classfile(type='file', name='file', style='visibility:hidden;')
+                    .input-append
+                      // This input is here purely for cosmetic reasons. The actual file is uploaded from the hidden input box !
+                      input#subfile.input-xlarge(type='text', onclick="$('#classfile').click();",  size='70', placeholder='Choose a class file')
+                      button#decompile.btn.btn-primary(type='button', style='margin-left:20px') #{btnName}
+                    br
+                .panel.panel-default(style='max-width:800px;padding:0')
+                  .panel-heading(style='height: 50px;padding:0;max-width:800px')
+                    .panel-title.pull-left
+                      label(style='display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;font-weight:400;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;') Source Code
+                    .clearfix.btn-group.pull-right
+                     button#copyFormattedBtn.btn.btn-link.pull-right(type='button', style='padding-right:40px;padding-bottom:5px', onclick='copyToClibboard()')
+                      a(href='#', data-toggle='tooltip', data-placement='bottom', title='Copy')
+                        span.glyphicon.glyphicon-copy
+                     button#downloadBtn.btn.btn-link.pull-right(type='button', style='padding-right:30px;padding-bottom:5px', onclick='saveTextAsFile()')
+                      a(href='#', data-toggle='tooltip', data-placement='bottom', title='Download')
+                        span.glyphicon.glyphicon-download-alt
+                  pre#formatted.prettyprint(style='max-width:800px;max-height:600px;padding:0').
+                  input#textoutput.form-control(type='hidden', style='display:none;')
+                  input#filename.form-control(type='hidden', style='display:none;')
         .col-md-2.hidden-xs(style='width:220px; float: left; padding:0,20,0,0')
           br
           br
           .panel.panel-default
             .list-group
               a.list-group-item(href='/decoder/url') Encoder/Decoder
-              a.list-group-item.active(href='/formatter/json') Code Formatter
-              a.list-group-item(href='/decompiler/java') Java Tools
+              a.list-group-item(href='/formatter/json') Code Formatter
+              a.list-group-item.active(href='/decompiler/java') Java Tools

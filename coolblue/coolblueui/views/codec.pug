@@ -17,7 +17,7 @@ html(lang='en')
       ga('create', 'UA-116074102-1', 'auto');
       ga('send', 'pageview');
     // End Google Analytics
-    meta(name='description', content='Online decoder and encoder. This tool can be used to decode/encode URL/Base64 content as well as JWT Token') 
+    meta(name='description', content=metaContent) 
     meta(name='google-site-verification', content='fSZDZoueRvEWkwHzBEB2N7AWIr-3aSTr-Muxn5wDgwU') 
     meta(name='keywords', content='Decoder, Encoder, Code Formatters, PDF Splits')
     title=title
@@ -135,6 +135,9 @@ html(lang='en')
       .social .fa-youtube-play:hover {
       background: #DF192A;
       }
+      .glyphicon {
+      font-size: 30px;
+      }
     block link
     -var selected = name;
 
@@ -197,6 +200,9 @@ html(lang='en')
                 br
                 br
                 label(for='output') Output:
+                button#copyBtn.btn.btn-link.pull-right(type='button', style='padding-right:60px', onclick='copyToClibboard()')
+                  a(href='#', data-toggle='tooltip', data-placement='bottom', title='Copy')
+                    span.glyphicon.glyphicon-copy
                 textarea#output.form-control(rows='9', style='max-width:800px')
         .col-md-2.hidden-xs(style='width:220px; float: left; padding:0,20,0,0')
           br
