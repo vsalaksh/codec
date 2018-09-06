@@ -12,6 +12,7 @@ import java.net.URLClassLoader;
 
 import com.strobel.decompiler.Decompiler;
 import com.strobel.decompiler.PlainTextOutput;
+import com.tools.decompiler.config.DecompilerConfig;
 
 public class JavaDecompiler {
 
@@ -19,25 +20,32 @@ public class JavaDecompiler {
 		PlainTextOutput output = new PlainTextOutput();
 		String directoryPath = getPackageName(compiledClass);
 		File directory = createDirectory(directoryPath);
-		//File aFile = new File("d:\\" + compiledClass + ".class");
-		//String targetDirectory = "d:\\customclasspath\\" + directoryPath.replace('/','\\');
+		File aFile = new File(DecompilerConfig.getInstance().getTempClassPath() + File.separatorChar + compiledClass + ".class");
+		String targetDirectory = DecompilerConfig.getInstance().getCustomClassPath();
+		if (!directoryPath.trim().isEmpty())
+		{
+			targetDirectory =DecompilerConfig.getInstance().getCustomClassPath() + File.separatorChar + directoryPath.replace('/',File.separatorChar);
+		}
 		//File directory = createDirectory(directoryPath);
-		File aFile = new File("/home/ec2-user/temp/" + compiledClass + ".class");
-		String targetDirectory = "/home/ec2-user/customclasspath/" + directoryPath;
+		//File aFile = new File("/home/ec2-user/temp/" + compiledClass + ".class");
+		//String targetDirectory = "/home/ec2-user/customclasspath/" + directoryPath;
 		String copyTo = targetDirectory + File.separatorChar + aFile.getName();
 		
 		createDirectory(targetDirectory);
 		System.out.println(copyTo);
-		//moveTo(aFile, targetDirectory + "\\" + compiledClass + ".class");
-		moveTo(aFile, targetDirectory + "/" + compiledClass + ".class");
-		
-		Decompiler.decompile(directoryPath.replace('/', '.') + "." + compiledClass, output);
+		moveTo(aFile, targetDirectory + File.separatorChar +  compiledClass + ".class");
+		//moveTo(aFile, targetDirectory + "/" + compiledClass + ".class");
+		String FQCN = compiledClass;
+		if (!directoryPath.trim().isEmpty()) {
+			FQCN = directoryPath.replace('/', '.') + "." + compiledClass;
+		}
+		Decompiler.decompile(FQCN, output);
 		
 		File decompiled = new File(compiledClass + ".java");
 		FileWriter fileWriter = new FileWriter(decompiled);
 		String toPrint = output.toString();
 		BufferedWriter bufWriter = new BufferedWriter(fileWriter);
-		int bufSize = 1024;
+		int bufSize = DecompilerConfig.getInstance().getBufferSize();
 		int startPos = 0;
 		System.out.println(toPrint.length());
 		try {
@@ -62,13 +70,14 @@ public class JavaDecompiler {
 
 	private static String getPackageName(String className) throws MalformedURLException 
 	{
-		File file = new File("d:\\");
-		File aFile = new File("d:\\" + className);
+		File file = new File(DecompilerConfig.getInstance().getTempClassPath());
+		File aFile = new File(DecompilerConfig.getInstance().getTempClassPath() + File.separatorChar + className);
 		// convert the file to URL format
 		URL url = file.toURI().toURL();
 		URL[] urls = new URL[] { url };
 
 		// load this folder into Class loader
+		System.out.println("ClassLoader URL : " + url);
 		CustomURLClassLoader cl = new CustomURLClassLoader(urls);
 		String packageName = "";
 		try {
@@ -80,6 +89,7 @@ public class JavaDecompiler {
 			//packageName = msg.substring(0, msg.lastIndexOf('/'));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		System.out.println(packageName);

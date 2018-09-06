@@ -49,13 +49,14 @@ router.get('/encoder/b64', function(req, res){
    });
 });
 router.get('/decoder/jwt', function(req, res){
-   res.render('codec', {
+   res.render('jwt', {
       name: "JWT Decoder", 
       btnName:"Decode",
 	  serviceEndPoint:"http://localhost:8080/coolblue/webapi/decoder/jwt",
-	  title: "JWT Decoder , Online JSON Web Token Decoder",
-	  content: "Decodes the input in to JWT Token",
-	  metaContent: "A Simple online decoder tool for JWT token, parses the jwt token and print it in a user readable format"
+	  signatureVerificationEndPoint:"http://localhost:8080/security/webapi/security/digitalsignature",
+	  title: "JWT Decoder Online , Online JSON Web Token Decoder",
+	  content: "JWT Decoder Online, Decode JWT Token and show in user friendly JWT format",
+	  metaContent: "JWT Decoder Online, Decode JWT Token and show in user friendly JWT format"
    });
 });
 
@@ -66,7 +67,7 @@ router.get('/formatter/json', function(req, res){
       name: "JSON Formatter", 
       btnName:"Format",
 	  serviceEndPoint:"http://localhost:8080/formatter/webapi/formatter/json",
-	  title: "JSON Formatter - Parses the JSON String and print it in a user friendly readable format",
+	  title: "JSON Formatter Online - Parses the JSON String and print it in a user friendly readable format",
 	  content: "A simple online tool Parses the JSON String and print it in a user friendly readable format.",
 	  metaContent: "A simple online JSON Formatter, parses the JSON String and print it in a user friendly readable format."
    });
@@ -113,9 +114,9 @@ router.get('/decompiler/java', function(req, res){
       name: "Java Decompiler", 
       btnName:"Decompile",
 	  serviceEndPoint:"http://localhost:8080/decompiler/webapi/decompiler/java",
-	  title: "Free Online Java Decompiler , Decompiles class files to java files, Helps on how to decompile class file",
-	  content: "Best Online Java Decompiler , decompiles your class files in to java files in a single click. Java decompiler online, Select the class file and click Decompile",
-	  metaContent: "Best Online Java Decompiler , decomiles your class files in to java files in a single click."
+	  title: "Free Online Java Decompiler , One of the fastest Java Decompiler available Online, Decompiles class files to java files, Helps on how to decompile class file",
+	  content: "Best Online Java Decompiler , One of the Java Decompiler online available online that decompile class file in to java file in a single click. Java decompiler online, Select the class file and click Decompile",
+	  metaContent: "Best Online Java Decompiler , Class file Decompiler, Java Decompiler Online helps to decompiles your class files in to java files in a single click."
 	  
    });
 });

@@ -9,6 +9,12 @@ public class CodecResponse {
 	{
 		
 	}
+	
+	public CodecResponse(String output, String errorMessage)
+	{
+		this.output = output;
+		this.errorMessage = errorMessage;
+	}
 
 	public String getOutput() {
 		return output;

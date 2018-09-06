@@ -11,12 +11,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.codec.services.exception.InvalidInputException;
 import com.codec.services.model.CodecRequest;
-import com.codec.services.model.CodecResponse;
+import com.codec.services.model.JWTHeader;
+import com.codec.services.model.JWTResponse;
 import com.codec.services.model.RawJWTToken;
 import com.codec.services.util.JSONStringFormatter;
 import com.codec.services.util.JWTParser;
+
 
 @Path("/decoder/jwt")
 public class JWTTokenDecoder {
@@ -27,9 +31,9 @@ public class JWTTokenDecoder {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public CodecResponse decode(@Context HttpServletResponse response, @QueryParam("input") String str,
+	public JWTResponse decode(@Context HttpServletResponse response, @QueryParam("input") String str,
 			CodecRequest req) {
-		CodecResponse resp = new CodecResponse();
+		JWTResponse resp = null;
 		String decodedValue = "";
 		System.out.println("Param String Value: " + str);
 		System.out.println("Parsed From Codec Request " + (req != null ? req.getInput() : "NULL"));
@@ -39,15 +43,42 @@ public class JWTTokenDecoder {
 		RawJWTToken jwtToken;
 		try {
 			jwtToken = parser.parse(str);
-			resp.setOutput(jwtToken.toString());
+			formatJWTToken(jwtToken);
+			String signingAlg = "";
+			try {
+				JWTHeader headerJSON = new ObjectMapper().readValue(jwtToken.getHeader(), JWTHeader.class);
+				signingAlg = headerJSON.getAlg();
+			}
+			catch (Exception exc)
+			{
+				//ignored
+				System.out.println("ALERT : Address this issue");
+				exc.printStackTrace();
+			}
+			resp = new JWTResponse(jwtToken.toString(), jwtToken.getHeader(), jwtToken.getBody(), signingAlg);			
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			resp.setErrorMessage(e.getMessage());
+			System.out.println(e.getMessage());
 		}
 
 		return resp;
 
+	}
+
+	private void formatJWTToken(RawJWTToken jwtToken) {
+		try
+		{
+			jwtToken.setHeader(JSONStringFormatter.formatJSONString(jwtToken.getHeader()));
+			jwtToken.setBody(JSONStringFormatter.formatJSONString(jwtToken.getBody()));
+		}
+		catch (Exception exc)
+		{
+			//ignore the exception during formatting
+			exc.printStackTrace();
+			System.out.println("JWT Formatting failed : " + exc.getMessage());
+		}
 	}
 
 }

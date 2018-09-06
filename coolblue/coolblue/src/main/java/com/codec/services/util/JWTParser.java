@@ -12,13 +12,15 @@ public class JWTParser {
 	public static RawJWTToken parse(String input) throws InvalidInputException
 	{
 		String[] split_string = input.split("\\.");
-		if (split_string.length != 3)
+		if (split_string.length < 2)
 			throw new InvalidInputException("Invalid JWT Token");
+		String jwtHeader = null;
+		String jwtBody = null;
 		String base64EncodedHeader = split_string[0];
 		String base64EncodedBody = split_string[1];
-		String base64EncodedSignature = split_string[2];
-		String jwtHeader = new String(decoder.decode(base64EncodedHeader));
-		String jwtBody = new String(decoder.decode(base64EncodedBody));
+		//String base64EncodedSignature = split_string[2];
+		jwtHeader = new String(decoder.decode(base64EncodedHeader));
+		jwtBody = new String(decoder.decode(base64EncodedBody));
 		//String jwtSignature = new String(decoder.decode(base64EncodedSignature));
 		
 		RawJWTToken jwtToken = new RawJWTToken(jwtHeader, jwtBody, "");

@@ -5,7 +5,8 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    //script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
     script(src="/javascripts/main.js")
     // Google Analytics
@@ -19,7 +20,7 @@ html(lang='en')
     // End Google Analytics
     meta(name='description', content=metaContent) 
     meta(name='google-site-verification', content='fSZDZoueRvEWkwHzBEB2N7AWIr-3aSTr-Muxn5wDgwU') 
-    meta(name='keywords', content='Decoder, Encoder, Code Formatters, PDF Splits')
+    meta(name='keywords', content=content)
     title=title
     //if IE
       script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
@@ -152,17 +153,14 @@ html(lang='en')
             span.icon-bar
           a.navbar-brand(style='padding-left:200px', href='#') DevToolZone
         #myNavbar.collapse.navbar-collapse(style='max-width:1000px')
-          ul.nav.navbar-nav.pull-right(style='text-align:right')
-            li
-              a(href='/decoder/url', title='URL Decoder') URL Decoder
-            li
-              a(href='/encoder/url', title='URL Encoder') URL Encoder
-            li
-              a(href='/decoder/b64', title='Base64 Decoder') Base64 Decoder
-            li
-              a(href='/encoder/b64', title='Base64 Encoder') Base64 Encoder
-            li
-              a(href='/decoder/jwt', title='JWT Decoder') JWT Decoder
+          ul.nav.navbar-nav
+            each val, key in menu
+              -if (selected === key)
+                li.active
+                  a(href=val, title=key)= key
+              -else
+                li
+                  a(href=val, title=key)= key	
     .container
       .row
         .col-md-9

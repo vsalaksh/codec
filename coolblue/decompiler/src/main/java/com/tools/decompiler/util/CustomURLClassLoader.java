@@ -1,11 +1,14 @@
 package com.tools.decompiler.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+
+import com.tools.decompiler.config.DecompilerConfig;
 
 public class CustomURLClassLoader extends URLClassLoader{
 
@@ -32,7 +35,8 @@ public class CustomURLClassLoader extends URLClassLoader{
 	      InputStream in = null;
 	      try {
 	        // get the input stream, throwing ClassNotFound if there is no resource.
-	        in = new FileInputStream("/home/ec2-user/temp/" + name.replaceAll("\\.", "/") +".class");
+	        //in = new FileInputStream("/home/ec2-user/temp/" + name.replaceAll("\\.", "/") +".class");
+	        in = new FileInputStream(DecompilerConfig.getInstance().getTempClassPath() + File.separatorChar +  name.replaceAll("\\.", "/") +".class");
 	        if( in == null ) throw new ClassNotFoundException("Could not find "+name);
 	        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 

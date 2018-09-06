@@ -26,6 +26,73 @@ $(function(){
 });
 });
 
+$('#jwtDecodeButton').click(function(){
+      var response = '';
+	  //alert('hi');
+	  var input = $('#jwttokeninput').val();
+	  var splitToken = input.split(".");
+	  var jwtHeaderPayload = '';
+	  var jwtSignature = '';
+	  $("#validSignatureMessage").text('');
+	  $("#signatureErrorMessage").text('');
+	  
+	  if (splitToken.length > 1)
+	  {
+	  jwtHeaderPayload = splitToken[0] + "." + splitToken[1];
+	  if (splitToken.length > 2)
+	  {
+	  jwtSignature = splitToken[2];
+	  }
+	  }
+	  else
+	  {
+	  alert('Not a Valid JWT Token');
+	  return;
+	  }
+	  //alert('hi');
+	  var jwtSigningAlg = '';
+	  $.ajax({ type: "POST",   
+	  url: $('#endurl').val(),
+	  crossDomain: true,
+	  contentType: "application/json",
+	   headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+    },
+	     dataType : "json",   
+         data: JSON.stringify({"input":$('#jwttokeninput').val()}),
+		 success : function(response)
+         {
+             //alert(text.output);
+			 token = response.output;
+			 $('#output').val(token);
+			 //alert(response.decodedJWTHeader);
+			 jwtHeaderVal = response.decodedJWTHeader;
+			 jwtBodyVal = response.decodedJWTBody;
+			 jwtSigningAlg = response.alg;
+			 //jwtHeaderVal1 = jwtHeaderVal.replace(/\n/g, "<br/>");
+			 document.getElementById('jwtHeader').innerHTML = jwtHeaderVal;
+			 document.getElementById('jwtBody').innerHTML = jwtBodyVal;
+			 $('#textoutput').val(token);
+			 $('#jwtHeaderPayload').val(jwtHeaderPayload);
+			 $('#jwtSignature').val(jwtSignature);
+			 $('#jwtSigningAlg').val(jwtSigningAlg);
+			 if (jwtSigningAlg.startsWith('HS'))
+			 {
+			 $('#signingKey').val('Enter Shared Secret');
+			 }
+			 else
+			 {
+			 $('#signingKey').val('Enter Base64 Encoded Public Key');
+			 }
+         },
+		 error : function(text, status, error)
+		 {
+		 alert(text.errorMessage);
+		 }
+});
+});
+
  $('#format').click(function(){
  var response = '';
 	  var input = $('#input').val();
@@ -70,6 +137,7 @@ $(function(){
 jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
     formval.append('file', file);
 	$('#filename').val(file.name.split('.')[0] + '.java');
+	return false;
 	//alert(file.name.split('.')[0]);
 });
 	  $.ajax({ type: "POST", url: $('#endurl').val(), crossDomain: true, contentType: false, processData: false, 
@@ -84,13 +152,17 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
 			 //response = response.replace(/&lt;script src[\\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g, '<span class=operative>$&</span>');
 			 
 			 //document.getElementById("formatted").innerHTML = response;
+			 if (response.includes('ERROR'))
+			 {
+			 response='Error while decompiling the file';
+			 }
 			 $('#formatted').html(response);
 			 PR.prettyPrint();
 			 
          },
 		 error : function(text, status, error)
 		 {
-		 alert(error + text.text);
+		 $('#formatted').html('<h4>If you get this error message, this could be due to double click on the open file window. Instead of double click, select the file first and then click open button</h4>');
 		 }
  
  });
@@ -108,7 +180,7 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
 });
  $('#copyBtn').click(function(){
   var copyText = document.getElementById("output");
- alert($('#textoutput').val());
+ //alert($('#textoutput').val());
 copyText.select();
 
  document.execCommand("copy");
@@ -123,7 +195,7 @@ copyText.select();
     tempInput.select();
     
     
- alert(copyText);
+ //alert(copyText);
  document.execCommand("copy");
  document.body.removeChild(tempInput);
 
@@ -156,14 +228,65 @@ copyText.select();
 
     downloadLink.click();
  });
+ 
+ $('#verifySignature').click(function(){
+ $("#validSignatureMessage").text('');
+ $("#signatureErrorMessage").text('');
+ var response = '';
+	  var input = $('#input').val();
+	  var endURL = $('#endurl').val();
+	  //alert(input + endURL);
+	  $.ajax({ type: "POST", url: $('#signatureVerificationEndPoint').val(), crossDomain: true, contentType: "application/json", 
+	   headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+    },
+	     dataType : "json",   
+         data: JSON.stringify({"payload":$('#jwtHeaderPayload').val(), "signature":$('#jwtSignature').val(), "base64EncodedKey":$('#signingKey').val(), "alg":$('#jwtSigningAlg').val(), "sharedSecret":$('#signingKey').val()}),
+		 success : function(text)
+         {
+            //alert('Success');
+			if(text.valid)
+			{
+			$("#validSignatureMessage").text('Signature Verified, Its Valid')
+			}
+			else
+			{
+			$("#signatureErrorMessage").text('Signature is not valid');
+			}
+			 
+         },
+		 error : function(text, status, error)
+		 {
+		 alert(error);
+		 }
+		 
+ 
+ });
+ });
+ 
  $('#input').on('paste', function(e) {
 setTimeout(function(){ //break the callstack to let the event finish
 
     //alert($('#input').val()); //read the value of the input field   
 $("#button").click();
 $("#format").click();
+$("#jwtDecodeButton").click();
   },0); 
  
    
 });	
+
+$('#jwttokeninput').on('paste', function(e) {
+setTimeout(function(){ //break the callstack to let the event finish
+
+    //alert($('#input').val()); //read the value of the input field   
+//$("#button").click();
+//$("#format").click();
+$("#jwtDecodeButton").click();
+  },0); 
+ 
+   
+});	
+
 });

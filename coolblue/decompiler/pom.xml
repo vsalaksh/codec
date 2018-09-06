@@ -74,6 +74,12 @@
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
         -->
+        <dependency>
+        	<groupId>com.coolblue</groupId>
+        	<artifactId>common</artifactId>
+        	<version>1.0.0</version>
+        	<scope>runtime</scope>
+        </dependency>
     </dependencies>
     <properties>
         <jersey.version>2.26</jersey.version>
