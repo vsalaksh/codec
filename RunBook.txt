@@ -1,0 +1,109 @@
+OpenSSL> genrsa -out /home/ec2-user/devtoolzone.key 2048
+ docker run --name docker-nginx -p 80:80 -d nginx -t
+ 
+ docker run -d --name nginxwithssl -p 80:80 -p 443:443 nginx
+ 
+  include /etc/nginx/conf.d/*.conf;
+  
+  
+  docker run -d -v /etc/nginx/conf.d:/etc/nginx:ro --name nginxwithssl -p 80:80 -p 443:443 nginx
+  
+   docker run -d --name nginx1 -p 80:80 -p 443:443 dockerssl
+ docker run -d --name nginx1 -p 80:80 -p 443:443 apachewithssl
+ 
+ 
+ [root@ip-172-31-32-203 ec2-user]# uname -a
+Linux ip-172-31-32-203.us-east-2.compute.internal 3.10.0-693.11.6.el7.x86_64 #1 SMP Thu Dec 28 14:23:39 EST 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+[root@ip-172-31-32-203 ec2-user]# cat /etc/os-release
+NAME="Red Hat Enterprise Linux Server"
+VERSION="7.4 (Maipo)"
+ID="rhel"
+ID_LIKE="fedora"
+VARIANT="Server"
+VARIANT_ID="server"
+VERSION_ID="7.4"
+PRETTY_NAME="Red Hat Enterprise Linux Server 7.4 (Maipo)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:7.4:GA:server"
+HOME_URL="https://www.redhat.com/"
+BUG_REPORT_URL="https://bugzilla.redhat.com/"
+
+REDHAT_BUGZILLA_PRODUCT="Red Hat Enterprise Linux 7"
+REDHAT_BUGZILLA_PRODUCT_VERSION=7.4
+REDHAT_SUPPORT_PRODUCT="Red Hat Enterprise Linux"
+REDHAT_SUPPORT_PRODUCT_VERSION="7.4"
+
+server_name devtoolzone.com;
+
+ssl_certificate /etc/nginx/ssl/devtoolzone.crt;
+ssl_certificate_key /etc/nginx/ssl/devtoolzone.key;
+
+LoadModule ssl_module modules/mod_ssl.so
+
+Listen 443
+<VirtualHost *:443>
+    ServerName devtoolzone.com
+    SSLEngine on
+    SSLCertificateFile "/etc/nginx/ssl/devtoolzone.crt"
+    SSLCertificateKeyFile "/etc/nginx/ssl/devtoolzone.key"
+	ProxyPass /services/ http://18.188.81.68:8080/
+	ProxyPassReverse /services/ http://18.188.81.68:8080/
+	ProxyPass / http://18.188.81.68:3000/
+	ProxyPassReverse / http://18.188.81.68:3000/
+</VirtualHost>
+
+For httpd.conf
+<VirtualHost *:80> 
+ServerName devtoolzone.com
+Redirect permanent / https://devtoolzone.com/
+</VirtualHost> 
+  
+ docker run -d -e SERVER_NAME=devtoolzone.com -v /etc/nginx/ssl/devtoolzone.crt:/usr/local/apache2/conf/server.crt  -v /etc/nginx/ssl/devtoolzone.key:/usr/local/apache2/conf/server.key  -v /home/ec2-user/apachewebserver/modifiedssl.conf:/usr/local/apache2/conf/extra/httpd-ssl.conf -p 80:80 -p 443:443 makeitwork
+ 
+ docker run -d -e SERVER_NAME=devtoolzone.com -v /etc/nginx/ssl/devtoolzone.crt:/usr/local/apache2/conf/server.crt  -v /etc/nginx/ssl/devtoolzone.key:/usr/local/apache2/conf/server.key  -v /home/ec2-user/apachewebserver/modifedssl.conf:/usr/local/apache2/conf/extra/httpd-ssl.conf -v /home/ec2-user/apachewebserver/modifedproxy.conf:/usr/local/apache2/conf/httpd.conf -p 80:80 -p 443:443 makeitwork
+ 
+ docker run -d -e SERVER_NAME=devtoolzone.com -v /etc/nginx/ssl/devtoolzone.crt:/usr/local/apache2/conf/server.crt  -v /etc/nginx/ssl/devtoolzone.key:/usr/local/apache2/conf/server.key  -v /home/ec2-user/apachewebserver/modifedssl.conf:/usr/local/apache2/conf/extra/httpd-ssl.conf -v /home/ec2-user/apachewebserver/modifedproxy.conf:/usr/local/apache2/conf/httpd.conf  -v /home/ec2-user/apachewebserver/htdocs:/usr/local/apache2/htdocs -p 80:80 -p 443:443 makeitwork
+
+
+ docker run -d -e SERVER_NAME=devtoolzone.com -v /etc/nginx/ssl/devtoolzone.crt:/usr/local/apache2/conf/server.crt  -v /etc/nginx/ssl/devtoolzone.key:/usr/local/apache2/conf/server.key  -p 80:80 -p 443:443 makeitwork
+ 
+ docker build -t makeitwork .
+ 
+ ======
+ systemctl stop docker
+ //clean up var/lib/docker/*
+  systemctl start docker
+ cd /home/ec2-user/apachewebserver
+ docker run -d --name nginx1 -p 80:80 -p 443:443 apachewithssl
+ docker build -t apachewithssl .
+ docker run -d -v /home/ec2-user/apachewebserver/httpd.conf:/usr/local/apache2/conf/httpd.conf  -v /home/ec2-user/apachewebserver/httpd-ssl.conf:/usr/local/apache2/conf/extra/httpd-ssl.conf --name nginx1 -p 80:80 -p 443:443 apachewithssl
+ 
+  docker run -d --name nginx1 -p 80:80 -p 443:443 newapachessl
+ EXPOSE 443
+FROM ilkka/httpd
+
+RUN sed -i 's%#\(Include conf/extra/httpd-ssl.conf\)%\1%' conf/httpd.conf \
+  && sed -i 's%#\(LoadModule ssl_module modules/mod_ssl.so\)%\1%' conf/httpd.conf \
+  && sed -i 's%#\(LoadModule socache_shmcb_module modules/mod_socache_shmcb.so\)%\1%' conf/httpd.conf \
+  && sed -i 's%ServerName www.example.com:443%ServerName ${SERVER_NAME}:443%' conf/extra/httpd-ssl.conf
+
+  
+How to Restart Catalina Instances:
+
+sudo su
+
+export JAVA_HOME=/home/ec2-user/jre1.8.0_161
+
+./catalina.sh stop
+
+./catalina.sh start &
+
+How to restart Node Instances:
+
+cd coolblueui
+
+forever restart app.js
+
+After creating decompiler war file, open it in 7zip and add procyon jar file in to web-inf/lib directory
+
