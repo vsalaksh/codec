@@ -4,7 +4,7 @@ html(lang='en')
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js', async='')
     //script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css')
     link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', rel='stylesheet')
@@ -140,6 +140,19 @@ html(lang='en')
       .glyphicon {
       font-size: 30px;
       }
+      h1{
+      color: #000000;
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      }
+      h2{
+      color: #000000;
+      font-size: 18px;
+      margin-top: 0px;
+      margin-bottom: 10px;
+      }
       .col-md-3 {
       display: block;
       float:left;
@@ -257,6 +270,11 @@ html(lang='en')
                 h1=name 
                 .panel.panel-default(style='max-width:800px; border:0px')
                   value=content
+                br
+                h2 What is Java Decompiler?
+                .panel.panel-default(style='max-width:800px; border:0px;')
+                  value
+                    | It is a computer program which converts the class files in to java source code, in a user friendly format.
                 br               
             form#decompilerForm(action='http://localhost:8080/decompiler/webapi/decompiler/java', method='post', enctype='multipart/form-data')
               .form-group
@@ -288,6 +306,6 @@ html(lang='en')
           br
           .panel.panel-default
             .list-group
-              a.list-group-item(href='/decoder/url') Encoder/Decoder
-              a.list-group-item(href='/formatter/json') Code Formatter
-              a.list-group-item.active(href='/decompiler/java') Java Tools
+              a.list-group-item(href='/decoder/url', title='URL, Base64, JWT Encoder/Decoder') Encoder/Decoder
+              a.list-group-item(href='/formatter/json', title='JSON, HTML, XML Formatter') Code Formatter
+              a.list-group-item.active(href='/decompiler/java', title='Java Decompiler Online') Java Tools

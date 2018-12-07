@@ -16,7 +16,7 @@ import com.tools.decompiler.config.DecompilerConfig;
 
 public class JavaDecompiler {
 
-	public static String decompile(String compiledClass) throws ClassNotFoundException, IOException {
+	public static File decompile(String compiledClass) throws ClassNotFoundException, IOException {
 		PlainTextOutput output = new PlainTextOutput();
 		String directoryPath = getPackageName(compiledClass);
 		File directory = createDirectory(directoryPath);
@@ -48,6 +48,7 @@ public class JavaDecompiler {
 		int bufSize = DecompilerConfig.getInstance().getBufferSize();
 		int startPos = 0;
 		System.out.println(toPrint.length());
+		
 		try {
 			while ((startPos < toPrint.length())) {
 				System.out.println(toPrint.length());
@@ -65,7 +66,8 @@ public class JavaDecompiler {
 			System.out.println(exc.getMessage());
 			exc.printStackTrace();
 		}
-		return toPrint;
+		
+		return decompiled;
 	}
 
 	private static String getPackageName(String className) throws MalformedURLException 

@@ -3,6 +3,11 @@ $(function(){
   $('#button').click(function(){
       var response = '';
 	  var input = $('#input').val();
+	  if (!input)
+	  {
+	  alert('Provide valid Input String');
+	  return;
+	  }
 	  $.ajax({ type: "POST",   
 	  url: $('#endurl').val(),
 	  crossDomain: true,
@@ -27,7 +32,8 @@ $(function(){
 });
 
 $('#jwtDecodeButton').click(function(){
-      var response = '';
+      
+	  var response = '';
 	  //alert('hi');
 	  var input = $('#jwttokeninput').val();
 	  var splitToken = input.split(".");
@@ -47,8 +53,13 @@ $('#jwtDecodeButton').click(function(){
 	  else
 	  {
 	  alert('Not a Valid JWT Token');
+	  document.getElementById('jwtHeader').innerHTML = '';
+      document.getElementById('jwtBody').innerHTML = '';
 	  return;
 	  }
+	  $('#jwtHeader').html('<label class="loader" id="loader-4" style="height:40px"><span></span><span></span><span></span>Decoding JWT Header in progresss</label>');
+      $('#jwtBody').html('<label class="loader" id="loader-4"><span></span><span></span><span></span>Decoding JWT Body in progresss</label>');
+ 
 	  //alert('hi');
 	  var jwtSigningAlg = '';
 	  $.ajax({ type: "POST",   
@@ -89,6 +100,8 @@ $('#jwtDecodeButton').click(function(){
 		 error : function(text, status, error)
 		 {
 		 alert(text.errorMessage);
+		 document.getElementById('jwtHeader').innerHTML = 'Decoding Failed';
+         document.getElementById('jwtBody').innerHTML = 'Decoding Failed';
 		 }
 });
 });
@@ -96,6 +109,11 @@ $('#jwtDecodeButton').click(function(){
  $('#format').click(function(){
  var response = '';
 	  var input = $('#input').val();
+	  if (!input)
+	  {
+	  alert('Provide valid Input');
+	  return;
+	  }
 	  var endURL = $('#endurl').val();
 	  //alert(input + endURL);
 	  $.ajax({ type: "POST", url: $('#endurl').val(), crossDomain: true, contentType: "application/json", 
@@ -142,22 +160,15 @@ jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
 });
 	  $.ajax({ type: "POST", url: $('#endurl').val(), crossDomain: true, contentType: false, processData: false, 
 	    data: formval,
-		 success : function(text)
+		 success : function(value)
          {
-             $("pre").removeClass("prettyprinted");
-			 response = text.decompiledCode;
+             alert('Decompiled' + value);
+			 response = value;
 			 $('#output').val(response);
 			 $('#textoutput').val(response);
 			 response = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			 //response = response.replace(/&lt;script src[\\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g, '<span class=operative>$&</span>');
-			 
-			 //document.getElementById("formatted").innerHTML = response;
-			 if (response.includes('ERROR'))
-			 {
-			 response='Error while decompiling the file';
-			 }
 			 $('#formatted').html(response);
-			 PR.prettyPrint();
+			 $("body").append("<iframe src='" + text.url+ "' style='display: none;' ></iframe>");
 			 
          },
 		 error : function(text, status, error)
@@ -289,4 +300,54 @@ $("#jwtDecodeButton").click();
    
 });	
 
+$('#jwthelp').click(function(){ //you can give id or class name here for $('button')
+    $(this).text(function(i,old){
+        return old=='Hide' ?  'Help' : 'Hide';
+    });
+});
+
+$('#samplejwt').click(function(){ 
+$('#jwttokeninput').val('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c');
+$("#jwtDecodeButton").click();
+
+});
+
+$('#compressjpeg').click(function(){
+ $('#formatted').html('<div class="container"><div class="row"><div class="col-md-3 bg"> Compressing in progresss<div class="loader" id="loader-6"><span></span><span></span><span></span></div></div></div>');
+ var response = '';
+	  //alert('Clicked Decompile');
+	  var formval = new FormData();
+jQuery.each(jQuery('#classfile')[0].files, function(i, file) {
+    formval.append('file', file);
+	$('#filename').val(file.name.split('.')[0] + '.java');
+	return false;
+	//alert(file.name.split('.')[0]);
+});
+	  $.ajax({ type: "POST", url: $('#endurl').val(), crossDomain: true, contentType: false, processData: false, 
+	    data: formval,
+		 success : function(text)
+         {
+             $("pre").removeClass("prettyprinted");
+			 response = text.decompiledCode;
+			 $('#output').val(response);
+			 $('#textoutput').val(response);
+			 response = response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			 //response = response.replace(/&lt;script src[\\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g, '<span class=operative>$&</span>');
+			 
+			 //document.getElementById("formatted").innerHTML = response;
+			 if (response.includes('ERROR'))
+			 {
+			 response='Error while decompiling the file';
+			 }
+			 $('#formatted').html(response);
+			 PR.prettyPrint();
+			 
+         },
+		 error : function(text, status, error)
+		 {
+		 $('#formatted').html('<h4>If you get this error message, this could be due to double click on the open file window. Instead of double click, select the file first and then click open button</h4>');
+		 }
+ 
+ });
+ });
 });
