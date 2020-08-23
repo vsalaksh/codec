@@ -78,7 +78,6 @@
         	<groupId>com.coolblue</groupId>
         	<artifactId>common</artifactId>
         	<version>1.0.0</version>
-        	<scope>runtime</scope>
         </dependency>
     </dependencies>
     <properties>

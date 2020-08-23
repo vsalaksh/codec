@@ -9,7 +9,7 @@ import java.util.Map;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
+
 
 public class JWTToken {
 	@JsonProperty("header")

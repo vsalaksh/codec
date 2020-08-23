@@ -26,7 +26,6 @@ public class FileDataSource implements ConfigDataSource{
 		this.fileName = fileName;
 	}
 
-	@Override
 	public Document loadConfig() throws ConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -51,7 +50,6 @@ public class FileDataSource implements ConfigDataSource{
         
 	}
 
-	@Override
 	public Document getConfig() throws ConfigurationException {
 		if (config == null)
 			loadConfig();
